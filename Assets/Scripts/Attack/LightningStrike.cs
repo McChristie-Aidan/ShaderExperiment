@@ -101,11 +101,11 @@ public class LightningStrike : MonoBehaviour, IAttack
     public void ApplyDeathMaterial(GameObject gameObject)
     {
         Renderer renderer = gameObject.GetComponent<Renderer>();
-        if (renderer.material.color != null)
+        if (renderer.material.mainTexture != null)
         {
-            Color temp = renderer.material.color;
+            Texture temp = renderer.material.mainTexture;
             renderer.material = deathMaterial;
-            renderer.material.SetColor("BaseColor", temp);
+            renderer.material.SetTexture("Texture", temp);
             StartCoroutine(Dissolve(renderer, dissolveDuration));
         }
     }

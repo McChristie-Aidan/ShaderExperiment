@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 [RequireComponent(typeof(Collider))]
 [RequireComponent(typeof(Rigidbody))]
@@ -24,6 +25,11 @@ public class Enemy : MonoBehaviour, IDamagable
     public void Die(float timeTilDeath)
     {
         this.enabled = false;
+        if (this.GetComponent<NavMeshAgent>() != null)
+        {
+            this.GetComponent<NavMeshAgent>().enabled = false;
+            this.GetComponent<MoveTowardPlayer>().enabled = false;
+        }
         Destroy(this.gameObject, timeTilDeath);
     }
 }
