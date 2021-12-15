@@ -9,6 +9,9 @@ public class PlayerFollow : MonoBehaviour
     Camera cam;
     InputDevice mouse;
     NavMeshAgent player;
+
+    [SerializeField]
+    GameObject particleEffect;
     // Start is called before the first frame update
     void Start()
     {
@@ -32,7 +35,7 @@ public class PlayerFollow : MonoBehaviour
             if (context.started == true)
             {
                 player.SetDestination(hit.point);
-               
+                Instantiate(particleEffect).transform.position = hit.point;
             }
         }
     }

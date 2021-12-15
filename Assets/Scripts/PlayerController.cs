@@ -12,6 +12,12 @@ public class PlayerController : MonoBehaviour
     InputDevice mouse;
     [SerializeField]
     GameObject pointerEffect;
+    [SerializeField]
+    [Range(0,5)]
+    private float shakeIntensity = 5f;
+    [SerializeField]
+    [Range(0,5)]
+    private float shakeTime = 1f;
     private void Start()
     {
         cam = Camera.main;
@@ -37,6 +43,12 @@ public class PlayerController : MonoBehaviour
                 Vector3 point = ray.GetPoint(rayDistance);
                 Instantiate(pointerEffect).transform.position = point;
             }
-        } 
+        }
+
+        //camera shake
+        if (CameraShake.Instance != null)
+        {
+            CameraShake.Instance.ShakeCam(shakeIntensity, shakeTime);
+        }
     }
 }

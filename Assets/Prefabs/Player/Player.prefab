@@ -148,6 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e05277a76587354d8083c0f72fa7bf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  particleEffect: {fileID: 9143967747593440085, guid: 4047c4ea2efc6534fad4d0eea82c4fae, type: 3}
 --- !u!114 &6938233363112286213
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -201,6 +202,10 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 86bfa314-1b93-49f6-9bc9-1b0270265219
     m_ActionName: New action map/Change target position[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: d4bb7404-9e35-4124-86a5-bb1733b92a18
+    m_ActionName: New action map/SetMovePostion[/Mouse/rightButton]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard&Mouse
   m_DefaultActionMap: New action map
