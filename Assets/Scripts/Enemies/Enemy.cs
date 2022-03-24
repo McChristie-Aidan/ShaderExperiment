@@ -31,7 +31,22 @@ public class Enemy : MonoBehaviour, IDamagable
     // Update is called once per frame
     void Update()
     {
-        navMeshAgent.SetDestination(target.transform.position);
+        if (state == EnemyState.Attacking)
+        {
+            navMeshAgent.SetDestination(target.transform.position);
+        }
+        if (state == EnemyState.Feared)
+        {
+            navMeshAgent.SetDestination(InverseTarget());
+        }
+    }
+    Vector3 InverseTarget()
+    {
+        Vector3 result = new Vector3();
+
+        result = this.transform.position - target.transform.position;
+
+        return result;
     }
     public void ChangeTarget(GameObject gameObject)
     {
