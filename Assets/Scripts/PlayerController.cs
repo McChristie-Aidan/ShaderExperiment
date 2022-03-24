@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.AI;
 using UnityEngine.InputSystem;
 
@@ -18,6 +19,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     [Range(0,5)]
     private float shakeTime = 1f;
+
+    
     private void Start()
     {
         cam = Camera.main;
@@ -29,26 +32,43 @@ public class PlayerController : MonoBehaviour
         mouse = Mouse.current;
     }
 
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.transform.tag == "Enemy")
+        {
+            ScoreKeeper.Instance.hasLost = true;
+        }
+    }
+
+    public void OnReset(InputAction.CallbackContext context)
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
     public void OnClick(InputAction.CallbackContext context)
     {
-        Ray ray = cam.ScreenPointToRay(Mouse.current.position.ReadValue());
-        Plane groundPlane = new Plane(Vector3.up, player.transform.position);
-
-        float rayDistance;
-
-        if (groundPlane.Raycast(ray, out rayDistance))
+        if (!ScoreKeeper.Instance.hasLost)
         {
-            if (context.started == true)
+            Ray ray = cam.ScreenPointToRay(Mouse.current.position.ReadValue());
+            Plane groundPlane = new Plane(Vector3.up, player.transform.position);
+
+            float rayDistance;
+
+            if (groundPlane.Raycast(ray, out rayDistance))
             {
-                Vector3 point = ray.GetPoint(rayDistance);
-                Instantiate(pointerEffect).transform.position = point;
+                if (context.started == true)
+                {
+                    Vector3 point = ray.GetPoint(rayDistance);
+                    Instantiate(pointerEffect).transform.position = point;
+                }
             }
-        }
 
-        //camera shake
-        if (CameraShake.Instance != null)
-        {
-            CameraShake.Instance.ShakeCam(shakeIntensity, shakeTime);
+            //camera shake
+            if (CameraShake.Instance != null)
+            {
+                CameraShake.Instance.ShakeCam(shakeIntensity, shakeTime);
+            }
         }
     }
 }

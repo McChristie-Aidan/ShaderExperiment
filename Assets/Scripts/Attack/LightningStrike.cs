@@ -18,6 +18,8 @@ public class LightningStrike : MonoBehaviour, IAttack
     float RotationSpeed = 2f;
     [SerializeField]
     float dissolveDuration = .5f;
+    [SerializeField]
+    GameObject fearTrigger;
     public int DamageAmount
     {
         get => damageAmount;
@@ -64,6 +66,9 @@ public class LightningStrike : MonoBehaviour, IAttack
                 Kill(damagable, dissolveDuration);
                 DeathEffect(other);
             }
+
+            GameObject go = Instantiate(fearTrigger, this.transform.position, this.transform.rotation);
+            GameObject.Destroy(go,activeTime);
         }
     }
     public void Kill(IDamagable subject)
@@ -113,10 +118,10 @@ public class LightningStrike : MonoBehaviour, IAttack
     {
         HitEffect(other.gameObject);
     }
-    private void OnCollisionEnter(Collision collision)
-    {
-        HitEffect(collision.gameObject);
-    }
+    //private void OnCollisionEnter(Collision collision)
+    //{
+    //    HitEffect(collision.gameObject);
+    //}
     IEnumerator Dissolve(Renderer renderer, float dissolveDuration)
     {
         float dissolveValue = 0f;

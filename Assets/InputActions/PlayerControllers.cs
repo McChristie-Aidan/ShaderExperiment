@@ -33,6 +33,14 @@ public class @PlayerControllers : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Press""
+                },
+                {
+                    ""name"": ""Reset"",
+                    ""type"": ""Button"",
+                    ""id"": ""b2144ccf-4c42-4279-a650-976da779c43c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
                 }
             ],
             ""bindings"": [
@@ -55,6 +63,17 @@ public class @PlayerControllers : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""SetMovePostion"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""aa576cc6-24ad-47f4-8e85-8d591980c0d5"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Reset"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -84,6 +103,7 @@ public class @PlayerControllers : IInputActionCollection, IDisposable
         m_Newactionmap = asset.FindActionMap("New action map", throwIfNotFound: true);
         m_Newactionmap_Fire = m_Newactionmap.FindAction("Fire", throwIfNotFound: true);
         m_Newactionmap_SetMovePostion = m_Newactionmap.FindAction("SetMovePostion", throwIfNotFound: true);
+        m_Newactionmap_Reset = m_Newactionmap.FindAction("Reset", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -135,12 +155,14 @@ public class @PlayerControllers : IInputActionCollection, IDisposable
     private INewactionmapActions m_NewactionmapActionsCallbackInterface;
     private readonly InputAction m_Newactionmap_Fire;
     private readonly InputAction m_Newactionmap_SetMovePostion;
+    private readonly InputAction m_Newactionmap_Reset;
     public struct NewactionmapActions
     {
         private @PlayerControllers m_Wrapper;
         public NewactionmapActions(@PlayerControllers wrapper) { m_Wrapper = wrapper; }
         public InputAction @Fire => m_Wrapper.m_Newactionmap_Fire;
         public InputAction @SetMovePostion => m_Wrapper.m_Newactionmap_SetMovePostion;
+        public InputAction @Reset => m_Wrapper.m_Newactionmap_Reset;
         public InputActionMap Get() { return m_Wrapper.m_Newactionmap; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -156,6 +178,9 @@ public class @PlayerControllers : IInputActionCollection, IDisposable
                 @SetMovePostion.started -= m_Wrapper.m_NewactionmapActionsCallbackInterface.OnSetMovePostion;
                 @SetMovePostion.performed -= m_Wrapper.m_NewactionmapActionsCallbackInterface.OnSetMovePostion;
                 @SetMovePostion.canceled -= m_Wrapper.m_NewactionmapActionsCallbackInterface.OnSetMovePostion;
+                @Reset.started -= m_Wrapper.m_NewactionmapActionsCallbackInterface.OnReset;
+                @Reset.performed -= m_Wrapper.m_NewactionmapActionsCallbackInterface.OnReset;
+                @Reset.canceled -= m_Wrapper.m_NewactionmapActionsCallbackInterface.OnReset;
             }
             m_Wrapper.m_NewactionmapActionsCallbackInterface = instance;
             if (instance != null)
@@ -166,6 +191,9 @@ public class @PlayerControllers : IInputActionCollection, IDisposable
                 @SetMovePostion.started += instance.OnSetMovePostion;
                 @SetMovePostion.performed += instance.OnSetMovePostion;
                 @SetMovePostion.canceled += instance.OnSetMovePostion;
+                @Reset.started += instance.OnReset;
+                @Reset.performed += instance.OnReset;
+                @Reset.canceled += instance.OnReset;
             }
         }
     }
@@ -183,5 +211,6 @@ public class @PlayerControllers : IInputActionCollection, IDisposable
     {
         void OnFire(InputAction.CallbackContext context);
         void OnSetMovePostion(InputAction.CallbackContext context);
+        void OnReset(InputAction.CallbackContext context);
     }
 }

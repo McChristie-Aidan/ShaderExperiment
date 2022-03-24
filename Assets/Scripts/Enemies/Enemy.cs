@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-enum EnemyState{ Attacking, Feared}
+public enum EnemyState{ Attacking, Feared}
 
 [RequireComponent(typeof(Collider))]
 [RequireComponent(typeof(Rigidbody))]
@@ -18,6 +18,11 @@ public class Enemy : MonoBehaviour, IDamagable
     NavMeshAgent navMeshAgent;
     [SerializeField]
     private GameObject target;
+
+    private float effectTimeStamp;
+
+    [SerializeField]
+    GameObject fearTrigger;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,27 +31,45 @@ public class Enemy : MonoBehaviour, IDamagable
         {
             target = GameObject.FindGameObjectWithTag("Player");
         }
+
+        state = EnemyState.Attacking;
     }
 
     // Update is called once per frame
     void Update()
     {
+        //normal action
         if (state == EnemyState.Attacking)
         {
             navMeshAgent.SetDestination(target.transform.position);
         }
+        //feared action
         if (state == EnemyState.Feared)
         {
             navMeshAgent.SetDestination(InverseTarget());
         }
+        //return state to normal
+        if (state != EnemyState.Attacking && effectTimeStamp < Time.time)
+        {
+            this.state = EnemyState.Attacking;
+        }
     }
+    //run away from target
     Vector3 InverseTarget()
     {
         Vector3 result = new Vector3();
 
         result = this.transform.position - target.transform.position;
 
+        result = this.transform.position + result;
+
         return result;
+    }
+    public void ChangeState(EnemyState newState, float time) 
+    {
+        Debug.Log("StateChanged");
+        this.state = newState;
+        effectTimeStamp = Time.time + time;
     }
     public void ChangeTarget(GameObject gameObject)
     {
@@ -72,5 +95,9 @@ public class Enemy : MonoBehaviour, IDamagable
             this.GetComponent<NavMeshAgent>().enabled = false;
         }
         Destroy(this.gameObject, timeTilDeath);
+        if (ScoreKeeper.Instance != null)
+        {
+            ScoreKeeper.Instance.score++;
+        }
     }
 }
